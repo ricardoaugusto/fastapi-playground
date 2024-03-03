@@ -1,4 +1,5 @@
 from fastapi import APIRouter, status, Response, Path, Query, Body
+from typing import List
 
 router = APIRouter(
     prefix='/post/{id}/comments',
@@ -23,15 +24,22 @@ def comments(
     return {"message": f'Post id: {id} comments: {n}'}
 
 
-@router.post('/create', summary='Create')
+@router.post('/create', summary='Create a comment')
 def create_comment(
         id: int = Path(
             title='id',
             description='Post id'
         ),
-        comment: str = Body(...)
+        comment: str = Body(
+            ...,
+            min_length=100,
+            max_length=300,
+            regex=r'^[a-z\s]*$'
+        ),
+        v: List[str] = Query([])
 ):
     return {
         'message': f'Comment created on post {id}',
-        'data': comment
+        'data': comment,
+        'version': v
     }

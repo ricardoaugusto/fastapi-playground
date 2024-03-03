@@ -31,11 +31,14 @@ def post(type: PostType):
 
 
 @router.get('/{id}')
-def post(id: int, response: Response = Response()):
+def post(
+        id: int = Path(..., gt=5, le=10),
+        response: Response = Response()
+):
     """
-    If the id is greater than 5, return HTTP 404
+    If the id is greater than 9, return HTTP 404
     """
-    if id > 5:
+    if id > 9:
         response.status_code = status.HTTP_404_NOT_FOUND
         return {"message": "Post id not found"}
     else:
