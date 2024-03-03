@@ -1,0 +1,3 @@
+# FastAPI Playground
+
+WIP
