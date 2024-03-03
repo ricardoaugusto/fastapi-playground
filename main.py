@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
 from router import post, comment
 
 app = FastAPI()
@@ -8,5 +8,12 @@ app.include_router(comment.router)
 
 
 @app.get('/')
-def index():
+def index(
+        version: int = Query(
+            1,
+            description='Revision version',
+            alias='v',
+            deprecated=True
+        )
+):
     return {"message": "Hello World"}

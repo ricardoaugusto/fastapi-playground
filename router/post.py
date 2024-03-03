@@ -1,4 +1,4 @@
-from fastapi import APIRouter, status, Response
+from fastapi import APIRouter, status, Response, Query, Path, Body
 from typing import Optional
 from PostType import *
 from models.Post import Post as PostModel
@@ -10,7 +10,18 @@ router = APIRouter(
 
 
 @router.get('/')
-def page(page: int = 1, per_page: Optional[int] = 10):
+def page(
+        page: int = Query(
+            1,
+            title='page',
+            description='Page number'
+        ),
+        per_page: Optional[int] = Query(
+            10,
+            title='per_page',
+            description='How many posts per page'
+        )
+):
     return {"message": f'all {per_page} posts on page {page}', "page": page, "per_page": per_page}
 
 
@@ -32,5 +43,33 @@ def post(id: int, response: Response = Response()):
 
 
 @router.post('/create')
-def create_post(post: PostModel):
-    return {"message": post}
+def create_post(
+        post: PostModel = Body(
+            None,
+            title='post',
+            description='PostModel'
+        )
+):
+    return {
+        "message": 'Post created',
+        'data': post
+    }
+
+
+@router.patch('/{id}/update')
+def update_post(
+        post: PostModel = Body(
+            None,
+            title='post',
+            description='PostModel'
+        ),
+        id: int = Path(
+            title='id',
+            description='Id of the post'
+        )
+):
+    return {
+        'id': id,
+        "message": 'Post updated',
+        'data': post
+    }
