@@ -1,7 +1,7 @@
 from fastapi import APIRouter, status, Response
 
 router = APIRouter(
-    prefix='/posts/{id}/comments',
+    prefix='/post/{id}/comments',
     tags=['comments']
 )
 
