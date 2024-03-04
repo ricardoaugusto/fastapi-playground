@@ -3,7 +3,15 @@ import datetime
 from typing import Optional, List, Dict
 from pydantic import BaseModel
 
-from models.Image import Image as ImageModel
+from schemas.image import Image as ImageModel
+
+
+"""
+Pydantic models are used for data validation and serialization,
+particularly in the context of API input and output, whereas
+SQLAlchemy models are typically used for defining the
+structure of database tables.
+"""
 
 class Post(BaseModel):
     title: str

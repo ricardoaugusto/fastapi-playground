@@ -3,6 +3,10 @@ from sqlalchemy.orm.session import Session
 from schemas.user import UserBase
 from db.models import DbUser
 
+"""
+User service handles the creation of a new user in the database.
+"""
+
 
 def create_user(db: Session, request: UserBase):
     new_user = DbUser(

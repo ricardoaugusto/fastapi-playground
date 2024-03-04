@@ -1,7 +1,7 @@
 from fastapi import APIRouter, status, Response, Query, Path, Body
 from typing import Optional
 from router.PostType import *
-from models.Post import Post as PostModel
+from schemas.post import Post as PostModel
 
 router = APIRouter(
     prefix='/post',
