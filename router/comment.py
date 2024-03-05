@@ -1,5 +1,6 @@
-from fastapi import APIRouter, status, Response, Path, Query, Body
-from typing import List
+from fastapi import APIRouter, Path, Query
+
+from schemas import comment
 
 router = APIRouter(
     prefix='/post/{id}/comments',
@@ -26,20 +27,11 @@ def comments(
 
 @router.post('/create', summary='Create a comment')
 def create_comment(
-        id: int = Path(
-            title='id',
-            description='Post id'
-        ),
-        comment: str = Body(
-            ...,
-            min_length=100,
-            max_length=300,
-            regex=r'^[a-z\s]*$'
-        ),
-        v: List[str] = Query([])
+        id: int,
+        comment: comment.CreateCommentRequest
 ):
     return {
         'message': f'Comment created on post {id}',
-        'data': comment,
-        'version': v
+        'data': comment.comment,
+        'version': comment.v
     }

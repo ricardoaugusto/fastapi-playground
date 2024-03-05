@@ -1,6 +1,8 @@
-from fastapi import APIRouter, status, Response, Query, Path, Body
 from typing import Optional
-from router.PostType import *
+
+from fastapi import APIRouter, status, Response, Query, Path, Body
+
+from router.post_type import *
 from schemas.post import Post as PostModel
 
 router = APIRouter(
