@@ -1,7 +1,10 @@
-from schemas.user import UserBase, UserDisplay
+from typing import List
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+
 from db.database import get_db
+from schemas.user import UserBase, UserDisplay
 from services import user
 
 router = APIRouter(
@@ -15,8 +18,22 @@ router = APIRouter(
 def create_user(request: UserBase, db: Session = Depends(get_db)):
     return user.create_user(db, request)
 
-# Read user
 
-# Update user
+@router.get('/', response_model=List[UserDisplay])
+def get_users(db: Session = Depends(get_db)):
+    return user.get_users(db)
 
-# Delete user
+
+@router.get('/{id}', response_model=UserDisplay)
+def get_user(id: int, db: Session = Depends(get_db)):
+    return user.get_user(db, id)
+
+
+@router.put('/{id}')
+def update_user(id: int, request: UserBase, db: Session = Depends(get_db)):
+    return user.update_user(db, id, request)
+
+
+@router.delete('/{id}')
+def delete_user(id: int, db: Session = Depends(get_db)):
+    return user.delete_user(db, id)
