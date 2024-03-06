@@ -24,5 +24,5 @@ class UserDisplay(BaseModel):
     username: str
     email: str
 
-    class Config():
+    class Config:
         from_attributes = True
