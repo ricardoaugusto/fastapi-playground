@@ -17,19 +17,19 @@ used to interact with the database tables.
 
 
 class DbUser(Base):
-    __tablename__ = 'users'
+    __tablename__ = "users"
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     email = Column(String)
     password = Column(String)
-    posts = relationship('DbPost', back_populates='user')
+    posts = relationship("DbPost", back_populates="user")
 
 
 class DbPost(Base):
-    __tablename__ = 'post'
+    __tablename__ = "posts"
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String)
     content = Column(String)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
-    user_id = Column(Integer, ForeignKey('users.id'))
-    user = relationship('DbUser', back_populates='posts')
+    user_id = Column(Integer, ForeignKey("users.id"))
+    user = relationship("DbUser", back_populates="posts")

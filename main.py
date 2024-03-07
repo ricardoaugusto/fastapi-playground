@@ -12,13 +12,10 @@ app.include_router(notes.router)
 models.Base.metadata.create_all(bind=engine)
 
 
-@app.get('/')
+@app.get("/")
 def index(
-        version: int = Query(
-            1,
-            description='Revision version',
-            alias='v',
-            deprecated=True
-        )
+    version: int = Query(
+        1, description="Revision version", alias="v", deprecated=True
+    )
 ):
     return {"message": "Hello World"}

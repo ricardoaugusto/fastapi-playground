@@ -11,7 +11,6 @@ from typing_extensions import Annotated
 
 
 class Post(BaseModel):
-    # to be used in UserResponse
     title: str
     content: str
     created_at: datetime
@@ -27,18 +26,14 @@ class PostBase(BaseModel):
     user_id: int
 
 
-# Import UserPostResponse locally where it's used
 class PostResponse(BaseModel):
     title: str
     content: str
     created_at: datetime
-    user: UserPostResponse  # Use quotes for forward reference
+    user: UserPostResponse
 
 
 class UserPostResponse(BaseModel):
     id: int
     name: str
     email: str
-
-    class Config:
-        from_attributes = True

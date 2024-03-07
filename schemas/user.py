@@ -4,23 +4,16 @@ from typing import List
 
 from pydantic import BaseModel
 
-# Import UserPostResponse locally where it's used
 from schemas.post import PostResponse
 
 
 class UserBase(BaseModel):
-    """
-    Base User class
-    """
     name: str
     email: str
     password: str
 
 
 class UserResponse(BaseModel):
-    """
-    User that is returned in response
-    """
     name: str
     email: str
     posts: List[PostResponse] = []
