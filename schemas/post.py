@@ -1,25 +1,44 @@
-import datetime
+from __future__ import annotations
 
-from typing import Optional, List, Dict
-from pydantic import BaseModel
+from datetime import datetime
 
-from schemas.image import Image as ImageModel
+from pydantic import BaseModel, StringConstraints
+from typing_extensions import Annotated
 
 
-"""
-Pydantic models are used for data validation and serialization,
-particularly in the context of API input and output, whereas
-SQLAlchemy models are typically used for defining the
-structure of database tables.
-"""
+# Remove the direct import of UserPostResponse
+# from schemas.user import UserPostResponse
+
 
 class Post(BaseModel):
+    # to be used in UserResponse
     title: str
     content: str
-    author: str
-    tags: List[str] = []
-    meta: Dict[str, str] = {}
-    image: Optional[ImageModel] = None
-    created_at: datetime.datetime
-    updated_at: datetime.datetime
-    deleted_at: datetime.datetime
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class PostBase(BaseModel):
+    title: str
+    content: Annotated[str, StringConstraints(min_length=100, max_length=300)]
+    created_at: datetime
+    user_id: int
+
+
+# Import UserPostResponse locally where it's used
+class PostResponse(BaseModel):
+    title: str
+    content: str
+    created_at: datetime
+    user: UserPostResponse  # Use quotes for forward reference
+
+
+class UserPostResponse(BaseModel):
+    id: int
+    name: str
+    email: str
+
+    class Config:
+        from_attributes = True

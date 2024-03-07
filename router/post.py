@@ -1,9 +1,9 @@
-from typing import Optional
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
 
-from fastapi import APIRouter, status, Response, Query, Path, Body
-
-from router.post_type import *
-from schemas.post import Post as PostModel
+from db.database import get_db
+from schemas.post import PostResponse, PostBase
+from services.post import create_post, get_post
 
 router = APIRouter(
     prefix='/post',
@@ -11,70 +11,11 @@ router = APIRouter(
 )
 
 
-@router.get('/')
-def page(
-        page: int = Query(
-            1,
-            title='page',
-            description='Page number'
-        ),
-        per_page: Optional[int] = Query(
-            10,
-            title='per_page',
-            description='How many posts per page'
-        )
-):
-    return {"message": f'all {per_page} posts on page {page}', "page": page, "per_page": per_page}
+@router.post('/', response_model=PostResponse)
+def create(post: PostBase, db: Session = Depends(get_db)):
+    return create_post(db, post)
 
 
-@router.get('/type/{type}')
-def post(type: PostType):
-    return {"message": f'Post type: {type.name}'}
-
-
-@router.get('/{id}')
-def post(
-        id: int = Path(..., gt=5, le=10),
-        response: Response = Response()
-):
-    """
-    If the id is greater than 9, return HTTP 404
-    """
-    if id > 9:
-        response.status_code = status.HTTP_404_NOT_FOUND
-        return {"message": "Post id not found"}
-    else:
-        return {"message": "Post id: {}".format(id)}
-
-
-@router.post('/create')
-def create_post(
-        post: PostModel = Body(
-            None,
-            title='post',
-            description='PostModel'
-        )
-):
-    return {
-        "message": 'Post created',
-        'data': post
-    }
-
-
-@router.patch('/{id}/update')
-def update_post(
-        post: PostModel = Body(
-            None,
-            title='post',
-            description='PostModel'
-        ),
-        id: int = Path(
-            title='id',
-            description='Id of the post'
-        )
-):
-    return {
-        'id': id,
-        "message": 'Post updated',
-        'data': post
-    }
+@router.get('/{id}', response_model=PostResponse)
+def get(id: int, db: Session = Depends(get_db)):
+    return get_post(db, id)

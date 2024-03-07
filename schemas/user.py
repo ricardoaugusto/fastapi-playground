@@ -1,27 +1,37 @@
+from __future__ import annotations
+
+from typing import List
+
 from pydantic import BaseModel
 
-"""
-Pydantic models are used for data validation and serialization,
-particularly in the context of API input and output, whereas
-SQLAlchemy models are typically used for defining the
-structure of database tables.
-"""
+# Import UserPostResponse locally where it's used
+from schemas.post import PostResponse
 
 
 class UserBase(BaseModel):
     """
     Base User class
     """
-    username: str
+    name: str
     email: str
     password: str
 
 
-class UserDisplay(BaseModel):
+class UserResponse(BaseModel):
     """
     User that is returned in response
     """
-    username: str
+    name: str
+    email: str
+    posts: List[PostResponse] = []
+
+    class Config:
+        from_attributes = True
+
+
+class UserPostResponse(BaseModel):
+    id: int
+    name: str
     email: str
 
     class Config:

@@ -11,7 +11,7 @@ User service handles the creation of a new user in the database.
 
 def create_user(db: Session, request: UserBase):
     new_user = DbUser(
-        username=request.username,
+        name=request.name,
         email=request.email,
         password=Hash.bcrypt(request.password)
     )
@@ -32,7 +32,7 @@ def get_user(db: Session, user_id: int):
 def update_user(db: Session, id: int, request: UserBase):
     user = db.query(DbUser).filter(DbUser.id == id)
     user.update({
-        DbUser.username: request.username,
+        DbUser.name: request.name,
         DbUser.email: request.email,
         DbUser.password: Hash.bcrypt(request.password)
     })
