@@ -1,6 +1,7 @@
 .vscode
 .idea
 .Python
+.DS_Store
 build/
 develop-eggs/
 dist/
