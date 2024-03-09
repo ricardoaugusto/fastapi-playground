@@ -36,6 +36,16 @@ def get_user(db: Session, user_id: int):
     return user
 
 
+def get_user_by_email(db: Session, email: str):
+    user = db.query(DbUser).filter(DbUser.email == email).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User with email {email} not found",
+        )
+    return user
+
+
 def update_user(db: Session, id: int, request: UserBase):
     user = db.query(DbUser).filter(DbUser.id == id)
     user.update(

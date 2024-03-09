@@ -1,9 +1,11 @@
 from enum import Enum
 from typing import Optional
 
-from fastapi import APIRouter, status, Response, Query, Path, Body
+from fastapi import APIRouter, Depends, status, Response, Query, Path, Body
 
+from auth.oauth2 import get_current_user
 from schemas.note import Note as NoteModel
+from schemas.user import UserBase
 
 router = APIRouter(prefix="/note", tags=["note"])
 
@@ -25,6 +27,7 @@ def page(
     per_page: Optional[int] = Query(
         10, title="per_page", description="How many notes per page"
     ),
+    current_user: UserBase = Depends(get_current_user),
 ):
     return {
         "message": f"all {per_page} notes on page {page}",
@@ -34,12 +37,16 @@ def page(
 
 
 @router.get("/type/{type}")
-def note(type: NoteType):
+def note(type: NoteType, current_user: UserBase = Depends(get_current_user)):
     return {"message": f"Note type: {type.name}"}
 
 
 @router.get("/{id}")
-def note(id: int = Path(..., gt=5, le=10), response: Response = Response()):
+def note(
+    id: int = Path(..., gt=5, le=10),
+    response: Response = Response(),
+    current_user: UserBase = Depends(get_current_user),
+):
     """
     If the id is greater than 9, return HTTP 404
     """
@@ -54,7 +61,8 @@ def note(id: int = Path(..., gt=5, le=10), response: Response = Response()):
 def create_note(
     note: NoteModel = Body(
         None, title="note", description="NoteModel", user_id="integer"
-    )
+    ),
+    current_user: UserBase = Depends(get_current_user),
 ):
     return {"message": "Note created", "data": note}
 
@@ -63,5 +71,6 @@ def create_note(
 def update_note(
     note: NoteModel = Body(None, title="note", description="NoteModel"),
     id: int = Path(title="id", description="Id of the note"),
+    current_user: UserBase = Depends(get_current_user),
 ):
     return {"id": id, "message": "Note updated", "data": note}
