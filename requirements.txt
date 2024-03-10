@@ -1,4 +1,7 @@
 black
+pytest
+requests
+httpx
 fastapi
 uvicorn
 pydantic
