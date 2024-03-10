@@ -12,3 +12,4 @@ python-dotenv
 python-multipart
 python-jose
 aiofiles
+websockets

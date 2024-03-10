@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 
 from db import models
 from db.database import engine
-from router import authentication, post, user, notes, file
+from router import authentication, post, user, notes, file, chat
 
 app = FastAPI()
 
@@ -15,6 +15,7 @@ app.include_router(user.router)
 app.include_router(post.router)
 app.include_router(file.router)
 app.include_router(notes.router)
+app.include_router(chat.router)
 
 files_directory = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "files"
