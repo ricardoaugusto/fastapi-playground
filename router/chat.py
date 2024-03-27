@@ -12,7 +12,7 @@ clients = []
 
 @router.get("/")
 async def get():
-    return HTMLResponse(html)
+    return HTMLResponse(html())
 
 
 @router.websocket("/sync")
